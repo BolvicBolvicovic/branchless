@@ -2,6 +2,10 @@
 
 Exercises to practice writing branchless code in C.
 
+## Cheat Sheet
+
+You can open the [cheat sheet](./branchless.excalidraw) in [Excalidraw](https://excalidraw.com/).
+
 ## Exercises
 
 - **max** - Find the maximum of two integers
