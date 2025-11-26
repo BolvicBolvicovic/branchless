@@ -16,10 +16,11 @@ You can open the [cheat sheet](./branchless.excalidraw) in [Excalidraw](https://
 
 ## Usage
 
-Compile and run any exercise:
+Compile update the branchless function and run any exercise:
 
 ```bash
 cd max
+vim main.c # Propose your solutions
 gcc -O2 -Wall -Wextra main.c && ./a.out
 ```
 
@@ -28,3 +29,5 @@ View the generated assembly:
 ```bash
 gcc -O2 -S -masm=intel main.c -o -
 ```
+
+Solutions are in the [solutions](./solutions) folder.
