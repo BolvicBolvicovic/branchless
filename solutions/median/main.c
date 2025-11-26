@@ -30,8 +30,15 @@ median_branch(int a, int b, int c)
 int
 median_branchless(int a, int b, int c)
 {
-	// Update code here
-	return a ^ b ^ c;
+	int	a_sup_b	= -(a < b);
+	int	a_sup_c = -(a < c);
+	int	b_sup_c = -(b < c);
+							// case c<
+	int	ab_min	= b ^ ((a ^ b) & a_sup_b);	// a || b
+	int	ac_min	= c ^ ((a ^ c) & a_sup_c);	// c
+	int	bc_min	= c ^ ((b ^ c) & b_sup_c);	// c
+	
+	return ab_min ^ ac_min ^ bc_min;
 }
 
 int

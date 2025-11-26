@@ -17,8 +17,10 @@ sort_branch(int* a, int* b)
 void
 sort_branchless(int* a, int* b)
 {
-	(void)a;
-	(void)b;
+	int	xor = (*a ^ *b) & -(*a < *b);
+	int	t = *a;
+	*a = *b ^ xor;
+	*b = t ^ xor;
 }
 
 int

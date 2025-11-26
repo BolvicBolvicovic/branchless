@@ -19,6 +19,8 @@ clamp_branch(int x)
 int
 clamp_branchless(int x)
 {
+	x *= x > 0;
+	x ^= ((x ^ 255) & -(x > 255));
 	return x;
 }
 

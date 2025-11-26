@@ -2,6 +2,43 @@
 #include <limits.h>
 #include <stdint.h>
 
+/*
+ 	.globl	clamp_range_branch
+	.type	clamp_range_branch, @function
+clamp_range_branch:
+	.cfi_startproc
+	cmp	esi, edx	# lo cmp with hi
+	mov	eax, esi	# tmp = lo
+	cmovle	esi, edx	# if le then lo = hi
+	cmovg	eax, edx	# else tmp = hi
+				# After that the high bound is in lo and the low bound tmp.
+				# I will refer to them as:
+				#	- tmp = lb for low bound
+				# 	- lo  = hb for high bound
+	cmp	esi, edi	# hb cmp with x
+	cmovg	esi, edi	# if g then hi = x
+	cmp	eax, edi	# lb cmp with x
+	cmovle	eax, esi	# if le then lb = hb
+	ret
+	.cfi_endproc
+...
+	.globl	clamp_range_branchless
+	.type	clamp_range_branchless, @function
+clamp_range_branchless:
+	.cfi_startproc
+	cmp	esi, edx	# lo cmp with hi
+	mov	eax, edx	# res = hi
+	cmovle	eax, esi	# if le then res = lo
+	cmp	eax, edi	# res cmp with x
+	cmovl	eax, edi	# if l then res = x
+	cmp	esi, edx	# lo cmp with hi
+	cmovl	esi, edx	# if l then lo = hi
+	cmp	esi, eax	# lo cmp with res
+	cmovle	eax, esi	# if le then res = lo
+	ret
+	.cfi_endproc
+ * */
+
 /* Branching clamp to an arbitrary [lo, hi] range (handles lo>hi by swapping) */
 int
 clamp_range_branch(int x, int lo, int hi)
@@ -21,8 +58,13 @@ clamp_range_branch(int x, int lo, int hi)
 int
 clamp_range_branchless(int x, int lo, int hi)
 {
-	(void)lo;
-	(void)hi;
+	int	range = (lo ^ hi) & -(lo > hi);
+
+	lo = lo ^ range;
+	hi = hi ^ range;
+	x  = x  ^ ((lo ^ x ) & -(x  < lo));
+	x  = x  ^ ((hi ^ x ) & -(x  > hi));
+
 	return x;
 }
 
