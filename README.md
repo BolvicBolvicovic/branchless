@@ -16,5 +16,11 @@ Compile and run any exercise:
 
 ```bash
 cd max
-gcc -o main main.c && ./main
+gcc -O2 -Wall -Wextra main.c && ./a.out
+```
+
+View the generated assembly:
+
+```bash
+gcc -O2 -S -masm=intel main.c -o -
 ```
